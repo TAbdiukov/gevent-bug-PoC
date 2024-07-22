@@ -47,3 +47,6 @@ For example, I will use Firefox + FoxyProxy
 2. Access `http://frogfind.com/?q=foobar` via Proxy.
 
 ![70622f591543b8206f61f95f79ba1c0f.png](/_images/70622f591543b8206f61f95f79ba1c0f.png)
+
+-------------------------------
+**Tim Abdiukov**
