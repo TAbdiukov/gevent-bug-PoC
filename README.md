@@ -36,15 +36,15 @@ For example, I will use Firefox + FoxyProxy
 
 ### Observe no bug in Flask
 
-1. Run app in Flask mode, `python main.py -s flask` 
-2. Access `http://frogfind.com/?q=foobar` via Proxy.
+1. Run app using Flask, `python main.py -s flask` 
+2. Access `http://frogfind.com/?q=foobar` via proxy.
 
 ![ab88cfb5700839316761071489c26f8a.png](/_images/ab88cfb5700839316761071489c26f8a.png)
 
 ### Observe bug in Gevent
 
-1. Run app in Flask mode, `python main.py -s flask` 
-2. Access `http://frogfind.com/?q=foobar` via Proxy.
+1. Run app using Gevent, `python main.py -s gevent` or just `python main.py`
+2. Access `http://frogfind.com/?q=foobar` via proxy.
 
 ![70622f591543b8206f61f95f79ba1c0f.png](/_images/70622f591543b8206f61f95f79ba1c0f.png)
 

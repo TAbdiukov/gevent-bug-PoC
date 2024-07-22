@@ -48,7 +48,6 @@ def gevent_bug_workaround(flask_request) -> str:
 	base_url = f"{scheme}://{safe_host}/"
 	# Split the proxy URL using the base URL
 	proxy_url_split = proxy_url.split(base_url)
-	print(str(proxy_url_split))
 
 	# Construct the presumably correct URL from the path and query string
 	presumably_correct_url = base_url
