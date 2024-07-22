@@ -31,7 +31,7 @@ For the demo, I use this URL: `http://frogfind.com/?q=foobar`
 ### Set up browser HTTP proxy
 
 For example, I will use Firefox + FoxyProxy
-1. [Get FoxyProxy](https://getfoxyproxy.org/downloads/)) ("Proxy Downloads & Instructions - FoxyProxy Standard")
+1. [Get FoxyProxy](https://getfoxyproxy.org/downloads/) ("Proxy Downloads & Instructions - FoxyProxy Standard")
 2. Set up HTTP proxy on `127.0.0.1` port `5000`. Refer to the screenshot below,
 
 ![74b635a8069290ad6b7e3c253cb01efd.png](/_images/74b635a8069290ad6b7e3c253cb01efd.png)
