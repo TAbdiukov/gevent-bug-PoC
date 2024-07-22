@@ -3,6 +3,8 @@ Proof of Concept of a bug present in Gevent but not Flask
 
 This is the Minimal Reproducible Example (MRE) to reproduce this bug. I also added a workaround function.
 
+Discussion [on Google Groups](https://groups.google.com/g/gevent/c/s5yWD3GSPc0)
+
 ## The problem
 
 Gevent, unlike Flask, incorrectly handles proxy requests (where the WSGI server operates as a proxy).
@@ -29,7 +31,7 @@ For the demo, I use this URL: `http://frogfind.com/?q=foobar`
 ### Set up browser HTTP proxy
 
 For example, I will use Firefox + FoxyProxy
-1. [Get FoxyProxy](https://getfoxyproxy.org/)
+1. [Get FoxyProxy]([https://getfoxyproxy.org/](https://getfoxyproxy.org/downloads/)) ("Proxy Downloads & Instructions - FoxyProxy Standard")
 2. Set up HTTP proxy on `127.0.0.1` port `5000`. Refer to the screenshot below,
 
 ![74b635a8069290ad6b7e3c253cb01efd.png](/_images/74b635a8069290ad6b7e3c253cb01efd.png)
