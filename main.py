@@ -46,11 +46,13 @@ def gevent_bug_workaround(flask_request) -> str:
 	safe_host = flask_request.host.split("://").pop()
 	# Construct the base URL that should not repeat
 	base_url = f"{scheme}://{safe_host}/"
+	# get short URL path after the base
+	url_path_short = flask_request.path.split(base_url).pop()
 	# Split the proxy URL using the base URL
 	proxy_url_split = proxy_url.split(base_url)
 
-	# Construct the presumably correct URL from the path and query string
-	presumably_correct_url = base_url
+	# Construct the presumably correct URL from the path, short URL path, and query string
+	presumably_correct_url = base_url + url_path_short
 	if(flask_request.query_string):
 		presumably_correct_url = presumably_correct_url + "?" + flask_request.query_string.decode()
 
