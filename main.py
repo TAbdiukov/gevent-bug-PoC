@@ -48,6 +48,8 @@ def gevent_bug_workaround(flask_request) -> str:
 	base_url = f"{scheme}://{safe_host}/"
 	# get short URL path after the base
 	url_path_short = flask_request.path.split(base_url).pop()
+	# If url_path_short is de-facto empty, then it is empty
+	if(url_path_short == "/"): url_path_short = ""
 	# Split the proxy URL using the base URL
 	proxy_url_split = proxy_url.split(base_url)
 
