@@ -2,9 +2,22 @@
 # -*- coding: utf8 -*-
 
 import ipaddress
+import urllib.parse
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
+
+def httpUrlDecode_RFC(data:str) -> str:
+	"""
+	This function decodes a URL-encoded string. RFC 3986-compliant.
+	Args:
+		data (str): A URL-encoded string.
+
+	Returns:
+		str: The decoded string. URL-encoded characters (which start with a '%' followed by two hexadecimal digits) are decoded and replaced in the string.
+
+	"""
+	return urllib.parse.unquote_to_bytes(data).decode("UTF-8")
 
 def is_ip_loopback(host:str ) -> bool:
 	"""

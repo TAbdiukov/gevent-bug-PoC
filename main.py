@@ -5,7 +5,7 @@
 Proof of Concept of a bug present in Gevent but not Flask
 """
 
-from flask import Flask, request, render_template_string, render_template
+from flask import Flask, request
 from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
@@ -17,9 +17,7 @@ import argparse
 parser = argparse.ArgumentParser(description='Run the app with Flask or Gevent.')
 parser.add_argument('--server', '-s', choices=['flask', 'gevent'], default='gevent', help='Choose the server to run the app.')
 
-from networking import is_host_egress
-import urllib.parse
-
+from networking import is_host_egress, httpUrlDecode_RFC
 
 def gevent_bug_workaround(flask_request) -> str:
 	"""
@@ -68,7 +66,7 @@ def gevent_bug_workaround(flask_request) -> str:
 		# Correct the proxy URL by removing the repeated base URL
 		proxy_url = base_url + proxy_url_split[-1]
 		# proxy_url needs to be decoded from RFC 3986-compliant httpEncode
-		proxy_url = urllib.parse.unquote(proxy_url)
+		proxy_url = httpUrlDecode_RFC(proxy_url)
 		logging.debug("*wsgi_get_proxy_url - new: "+proxy_url)
 		# Sanity check to ensure the corrected URL matches the presumably correct URL
 		# Sanity check is for further development:
@@ -100,7 +98,7 @@ def display_info(path):
 		</body>
 		</html>
 		"""
-		return html_content.encode("mac_roman"), 200
+		return html_content, 200
 	else:
 		return "Request is not proxy", 404
 
