@@ -67,6 +67,7 @@ def gevent_bug_workaround(flask_request) -> str:
 		logging.debug("*wsgi_get_proxy_url - old: "+proxy_url)
 		# Correct the proxy URL by removing the repeated base URL
 		proxy_url = base_url + proxy_url_split[-1]
+		# proxy_url needs to be decoded from RFC 3986-compliant httpEncode
 		proxy_url = urllib.parse.unquote(proxy_url)
 		logging.debug("*wsgi_get_proxy_url - new: "+proxy_url)
 		# Sanity check to ensure the corrected URL matches the presumably correct URL
