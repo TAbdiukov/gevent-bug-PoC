@@ -19,7 +19,7 @@ def httpUrlDecode_RFC(data:str) -> str:
 	"""
 	return urllib.parse.unquote_to_bytes(data).decode("UTF-8")
 
-def is_ip_loopback(host:str ) -> bool:
+def is_ip_loopback(host:str) -> bool:
 	"""
 	Checks if a given host is a loopback IP address.
 
