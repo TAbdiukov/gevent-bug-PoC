@@ -36,7 +36,7 @@ def is_host_egress(host:str) -> bool:
 	if(host is None):
 		return False
 
-	safe_host = host.split("://").pop()
+	safe_host = host.split("://")[-1]
 	return not(
 		'127.0.0.1' in safe_host or
 		'0.0.0.0' in safe_host or
