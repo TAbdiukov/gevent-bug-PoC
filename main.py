@@ -5,7 +5,7 @@
 Proof of Concept of a bug present in Gevent but not Flask
 """
 
-from flask import Flask, request, render_template_string
+from flask import Flask, request, render_template_string, render_template
 from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
@@ -18,6 +18,8 @@ parser = argparse.ArgumentParser(description='Run the app with Flask or Gevent.'
 parser.add_argument('--server', '-s', choices=['flask', 'gevent'], default='gevent', help='Choose the server to run the app.')
 
 from networking import is_host_egress
+import urllib.parse
+
 
 def gevent_bug_workaround(flask_request) -> str:
 	"""
@@ -61,17 +63,19 @@ def gevent_bug_workaround(flask_request) -> str:
 
 	# Check if the URL is bugged (repeated base URL or incorrect URL)
 	if((len(proxy_url_split) >= 3 and (proxy_url_split[0] == proxy_url_split[1] == False)) or proxy_url != presumably_correct_url): # Bugged WSGI server
-		logging.debug("*gevent_bug_workaround - URL was corrected!")
-		logging.debug("*gevent_bug_workaround - old: "+proxy_url)
+		logging.debug("*wsgi_get_proxy_url - URL was corrected!")
+		logging.debug("*wsgi_get_proxy_url - old: "+proxy_url)
 		# Correct the proxy URL by removing the repeated base URL
 		proxy_url = base_url + proxy_url_split[-1]
-		logging.debug("*gevent_bug_workaround - new: "+proxy_url)
+		proxy_url = urllib.parse.unquote(proxy_url)
+		logging.debug("*wsgi_get_proxy_url - new: "+proxy_url)
 		# Sanity check to ensure the corrected URL matches the presumably correct URL
 		# Sanity check is for further development:
 		if(proxy_url != presumably_correct_url):
-			raise ValueError(f"*gevent_bug_workaround fixable URLs do not match: \r\n1:{proxy_url}\r\n2:{presumably_correct_url}")
+			raise ValueError(f"*wsgi_get_proxy_url fixable URLs do not match: \r\n1:{proxy_url}\r\n2:{presumably_correct_url}")
 
 	return proxy_url
+
 
 @app.route('/', defaults={'path': ''}, methods=['GET'])
 @app.route('/<path:path>', methods=['GET'])
@@ -95,7 +99,7 @@ def display_info(path):
 		</body>
 		</html>
 		"""
-		return render_template_string(html_content), 200
+		return html_content.encode("mac_roman"), 200
 	else:
 		return "Request is not proxy", 404
 
