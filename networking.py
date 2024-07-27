@@ -38,6 +38,11 @@ def is_host_egress(host:str) -> bool:
 
 	safe_host = host.split("://")[-1]
 	safe_host = safe_host.split("/")[0]
+	# safe_host now can be like:
+	# localhost
+	# 127.0.0.1
+	# 127.0.0.1:6000
+	# [2001:0000:130F:0000:0000:09C0:876A:130B]:4444
 	return not(
 		'127.0.0.1' in safe_host or
 		'0.0.0.0' in safe_host or
