@@ -17,7 +17,7 @@ import argparse
 parser = argparse.ArgumentParser(description='Run the app with Flask or Gevent.')
 parser.add_argument('--server', '-s', choices=['flask', 'gevent'], default='gevent', help='Choose the server to run the app.')
 
-from networking import is_host_egress, httpUrlDecode_RFC
+from networking import is_host_ingress, httpUrlDecode_RFC
 
 def gevent_bug_workaround(flask_request) -> str:
 	"""
@@ -79,7 +79,7 @@ def gevent_bug_workaround(flask_request) -> str:
 @app.route('/', defaults={'path': ''}, methods=['GET'])
 @app.route('/<path:path>', methods=['GET'])
 def display_info(path):
-	is_proxy_requested = is_host_egress(request.host)
+	is_proxy_requested = not is_host_ingress(request.host)
 
 	if is_proxy_requested:
 		proxy_url = gevent_bug_workaround(request)

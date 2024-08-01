@@ -21,6 +21,7 @@ def httpUrlDecode_RFC(data:str) -> str:
 
 def is_ip_loopback(host:str) -> bool:
 	"""
+	NETWORKING function
 	Checks if a given host is a loopback IP address.
 
 	Args:
@@ -35,30 +36,68 @@ def is_ip_loopback(host:str) -> bool:
 	except ValueError:
 		return False
 
-def is_host_egress(host:str) -> bool:
+def separate_last_delimited_value(s:str, delim:str=":"):
+	if(not s):
+		return s, ""
+
+	parts = s.split(delim)
+
+	if len(parts) <= 1:
+		return s, ""
+
+	last = parts[-1] if parts[-1] != delim else ""
+
+	return delim.join(parts[:-1]), last
+
+
+def try_extract_bare_host_and_port(any_host:str):
+	try:
+		assert(any_host)
+		host, port = separate_last_delimited_value(any_host)
+
+		assert(host)
+		assert(port)
+
+		host = host.split("://")[-1].split("/")[0]
+		assert(host)
+
+		port = int(port)
+		assert(port >= 0)
+		assert(port <= 0xFFFF)
+		return host, port
+	except (AssertionError, AttributeError, ValueError, IndexError):
+		return None, None
+
+def is_host_ingress(host:str) -> bool:
 	"""
-	Checks if the given host is egress.
+	Checks if the given host is inbound.
 
 	Args:
-		host (str): The host to be checked.
+		host (str): The host to be checked. Can be an IP address or a host, and can contain a protocol and port.
 
 	Returns:
-		bool: True if the host is not None, not equal to Cfg.HOST, not 'localhost', not '0.0.0.0' and not an IP loopback. False otherwise.
+		bool: Is host inbound
 	"""
-	# Extract the host part of the URL
 	if(host is None):
 		return False
 
-	safe_host = host.split("://")[-1]
-	safe_host = safe_host.split("/")[0]
-	# safe_host now can be like:
-	# localhost
-	# 127.0.0.1
-	# 127.0.0.1:6000
-	# [2001:0000:130F:0000:0000:09C0:876A:130B]:4444
-	return not(
-		'127.0.0.1' in safe_host or
-		'0.0.0.0' in safe_host or
-		'localhost' in safe_host or
-		is_ip_loopback(safe_host)
-	)
+	bare_host, bare_port = try_extract_bare_host_and_port(host)
+	if(bare_host):
+		return (
+			is_ip_loopback(bare_host)
+		)
+	else:
+		# Extract the host part of the URL
+		safe_host = host.split("://")[-1]
+		safe_host = safe_host.split("/")[0]
+
+		# safe_host now can be like:
+		# localhost
+		# 127.0.0.1
+		# 127.0.0.1:6000
+		# [2001:0000:130F:0000:0000:09C0:876A:130B]:4444
+		return (
+			'127.0.0.' in safe_host or
+			'localhost' in safe_host or
+			is_ip_loopback(safe_host)
+		)
