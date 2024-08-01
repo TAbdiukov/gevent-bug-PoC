@@ -93,7 +93,7 @@ def test_wsgi_get_proxy_url_edgecase_5():
 		corrected_url = wsgi_get_proxy_url(request)
 
 		# Assert the corrected URL matches the expected URL
-		assert corrected_url in ['http://frogfind.com:5000/test o+o', 'http://frogfind.com:5000/test%20o%2Bo']
+		assert corrected_url == 'http://frogfind.com:5000/test o+o'
 
 def test_wsgi_get_proxy_url_edgecase_6_urlEncode():
 	with app.test_request_context('/http://frogfind.com:5000/test%20o%2Bo'):
@@ -106,7 +106,7 @@ def test_wsgi_get_proxy_url_edgecase_6_urlEncode():
 		corrected_url = wsgi_get_proxy_url(request)
 
 		# Assert the corrected URL matches the expected URL
-		assert corrected_url in ['http://frogfind.com:5000/test o+o', 'http://frogfind.com:5000/test%20o%2Bo']
+		assert corrected_url == 'http://frogfind.com:5000/test o+o'
 
 def test_wsgi_get_proxy_url_edgecase_7_nonANSI():
 	with app.test_request_context('/http://frogfind.com:5000/Тестування%20api'):
@@ -119,7 +119,7 @@ def test_wsgi_get_proxy_url_edgecase_7_nonANSI():
 		corrected_url = wsgi_get_proxy_url(request)
 
 		# Assert the corrected URL matches the expected URL
-		assert corrected_url in ['http://frogfind.com:5000/Тестування%20api', 'http://frogfind.com:5000/Тестування api']
+		assert corrected_url == 'http://frogfind.com:5000/Тестування api'
 
 if __name__ == '__main__':
 	pytest.main(args=['-v'])

@@ -49,8 +49,8 @@ def gevent_bug_workaround(flask_request) -> str:
 	base_url = f"{scheme}://{safe_host}/"
 	# get short URL path after the base
 	url_path_short = flask_request.path.split(base_url)[-1]
-	# If url_path_short is de-facto empty, then it is empty
-	if(url_path_short == "/"): url_path_short = ""
+	# trim url_path_short ( `lstrip` for Chinese websites )
+	url_path_short = url_path_short.lstrip("/")
 	# Split the proxy URL using the base URL
 	proxy_url_split = proxy_url.split(base_url)
 
@@ -58,6 +58,7 @@ def gevent_bug_workaround(flask_request) -> str:
 	presumably_correct_url = base_url + url_path_short
 	if(flask_request.query_string):
 		presumably_correct_url = presumably_correct_url + "?" + flask_request.query_string.decode()
+	presumably_correct_url = httpUrlDecode_RFC(presumably_correct_url)
 
 	# Check if the URL is bugged (repeated base URL or incorrect URL)
 	if((len(proxy_url_split) >= 3 and (proxy_url_split[0] == proxy_url_split[1] == False)) or proxy_url != presumably_correct_url): # Bugged WSGI server
