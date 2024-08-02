@@ -90,7 +90,7 @@ def display_info(path):
 		html_content = f"""
 		<html>
 		<body>
-			<h1>Gevent bug PoC (TAbdiukov)</h1>
+			<head><title>Gevent bug PoC (TAbdiukov)</title></head>
 			<h2>Request Information</h2>
 			<p><strong>WSGI app:</strong> {args.server}</p>
 			<p><strong>request.url:</strong> {request.url}</p>
@@ -99,6 +99,22 @@ def display_info(path):
 		</body>
 		</html>
 		"""
+
+		path_info = f"Path: {str(path)}<br>"
+		url_info = f"URL: {request.url}<br>"
+		request_info = "<br>".join([f"{attr}: {value}" for attr, value in request.__dict__.items()])
+
+		html_content += f"""
+		<html>
+		<body>
+			<h2>Debugging Information</h2>
+			<p>{path_info}</p>
+			<p>{url_info}</p>
+			<p>{request_info}</p>
+		</body>
+		</html>
+		"""
+
 		return html_content, 200
 	else:
 		return "Request is not proxy", 404
