@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf8 -*-
 
+import subprocess
+
 try:
 	import pytest
 except (ImportError, ModuleNotFoundError):
@@ -121,5 +123,25 @@ def test_wsgi_get_proxy_url_edgecase_7_nonANSI():
 		# Assert the corrected URL matches the expected URL
 		assert corrected_url == 'http://frogfind.com:5000/Тестування api'
 
+def run_compileall():
+	try:
+		result = subprocess.run(['python', '-m', 'compileall'], check=True, capture_output=True, text=True)
+		print("Output:\n", result.stdout)
+		print("Errors:\n", result.stderr)
+		return True
+	except subprocess.CalledProcessError as e:
+		print(f"An error occurred: {e}")
+		return False
+
 if __name__ == '__main__':
-	pytest.main(args=['-v'])
+	if(run_compileall()):
+		exit_code = pytest.main(args=['-v'])
+		if exit_code != 0:
+			print("Tests failed")
+			exit(1)
+		else:
+			print("Success")
+			exit(0)
+	else:
+		print("Compilation failed")
+		exit(1)

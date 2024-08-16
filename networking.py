@@ -5,7 +5,7 @@ import ipaddress
 import urllib.parse
 
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 def httpUrlDecode_RFC(data:str) -> str:
 	"""
@@ -36,6 +36,15 @@ def is_ip_loopback(host:str) -> bool:
 	except ValueError:
 		return False
 
+def is_port_valid(port) -> bool:
+	try:
+		port = int(port)
+		assert(port >= 0)
+		assert(port <= 0xFFFF)
+	except (AssertionError, AttributeError, ValueError, IndexError):
+		return False
+	return True
+
 def separate_last_delimited_value(s:str, delim:str=":"):
 	if(not s):
 		return s, ""
@@ -49,7 +58,6 @@ def separate_last_delimited_value(s:str, delim:str=":"):
 
 	return delim.join(parts[:-1]), last
 
-
 def try_extract_bare_host_and_port(any_host:str):
 	try:
 		assert(any_host)
@@ -62,8 +70,8 @@ def try_extract_bare_host_and_port(any_host:str):
 		assert(host)
 
 		port = int(port)
-		assert(port >= 0)
-		assert(port <= 0xFFFF)
+		assert(is_port_valid(port))
+
 		return host, port
 	except (AssertionError, AttributeError, ValueError, IndexError):
 		return None, None
