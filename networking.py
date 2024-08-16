@@ -5,7 +5,7 @@ import ipaddress
 import urllib.parse
 
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 def httpUrlDecode_RFC(data:str) -> str:
 	"""
